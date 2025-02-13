@@ -5,7 +5,7 @@ import numpy as np
 from flask import Flask, render_template, request, jsonify
 
 import global_vars
-import util
+from util import util
 
 flask_app = Flask(__name__)
 
