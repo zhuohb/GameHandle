@@ -15,14 +15,13 @@ def index():
     return render_template('index.html')
 
 
-@flask_app.route('/submit', methods=['POST'])
-def submit():
+@flask_app.route('/match', methods=['POST'])
+def match():
+    small_image_name = request.form.get('small_image_name')
     large_image = request.files['large_image']
-    large_img = cv2.imdecode(np.frombuffer(large_image.read(), np.uint8), cv2.IMREAD_COLOR)
+    img_mat = cv2.imdecode(np.frombuffer(large_image.read(), np.uint8), cv2.IMREAD_COLOR)
 
-    small_img = global_vars.small_img
-
-    output_image = util.perform_template_matching(large_img, small_img)
+    output_image = util.web_match(img_mat, global_vars.template_mat_map[small_image_name])
 
     return jsonify({'output_image': output_image})
 

@@ -47,19 +47,18 @@ imageMatchForm.addEventListener('submit', async (e) => {
     // 阻止表单的默认提交行为，避免页面刷新
     e.preventDefault();
 
+    const small_image_name = document.getElementById('small_image_name').value;
     // 获取用户上传的图像文件
     const largeImage = document.getElementById('large_image').files[0];
     // 创建一个 FormData 对象，用于收集表单数据
     const formData = new FormData();
     // 将图像文件添加到 FormData 对象中
     formData.append('large_image', largeImage);
+    formData.append('small_image_name', small_image_name);
 
     try {
-        // 使用 fetch API 发起一个异步的 POST 请求到 /submit 接口
-        const response = await fetch('/submit', {
-            // 请求方法为 POST
+        const response = await fetch('/match', {
             method: 'POST',
-            // 请求体为包含图像文件的 FormData 对象
             body: formData
         });
 
