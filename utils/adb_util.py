@@ -14,6 +14,8 @@ def click(ip, x, y, width, height):
         random_x = random.randint(x, x + width - 1)
         random_y = random.randint(y, y + height - 1)
 
+        print(f'点击坐标: {random_x},{random_y}')
+
         command = ['adb', '-s', ip, 'shell', 'input', 'tap', str(random_x), str(random_y)]
         subprocess.run(command, capture_output=True, text=True, check=True)
         return True
@@ -35,8 +37,7 @@ def swipe(ip, x1, y1, x2, y2, duration):
 
 def screenshot(ip):
     try:
-        # 构建 ADB 截图并将图像数据输出到 stdout 的命令
-        command = ['adb','-s', ip,'exec-out', 'screencap', '-p']
+        command = ['adb', '-s', ip, 'exec-out', 'screencap', '-p']
         result = subprocess.run(command, capture_output=True, check=True)
         img_bytes = result.stdout
         # 将字节数据转换为 numpy 数组

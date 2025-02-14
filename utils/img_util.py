@@ -1,6 +1,7 @@
 import cv2
 import base64
 import numpy as np
+import global_vars
 
 
 # 模板匹配,在图上画框,返回图像 适用于web
@@ -33,10 +34,10 @@ def web_match(large_img, small_img, threshold=0.9):
 def match(large_img, small_img, threshold=0.9):
     if small_img is not None:
         # 执行模板匹配
-        result = cv2.matchTemplate(large_img, small_img, cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(large_img, global_vars.template_mat_map[small_img], cv2.TM_CCOEFF_NORMED)
         # 找到所有匹配得分大于阈值的位置
         locations = np.where(result >= threshold)
-        h, w, _ = small_img.shape
+        h, w, _ = global_vars.template_mat_map[small_img].shape
 
         coordinates = []
         # 遍历所有匹配位置，收集坐标
@@ -44,7 +45,6 @@ def match(large_img, small_img, threshold=0.9):
             top_left = loc
             bottom_right = (top_left[0] + w, top_left[1] + h)
             coordinates.append((top_left, bottom_right))
-
         return coordinates
     else:
         return None

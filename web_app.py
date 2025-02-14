@@ -5,7 +5,7 @@ import numpy as np
 from flask import Flask, render_template, request, jsonify
 
 import global_vars
-from util import util
+from utils import img_util
 
 flask_app = Flask(__name__)
 
@@ -21,7 +21,7 @@ def match():
     large_image = request.files['large_image']
     img_mat = cv2.imdecode(np.frombuffer(large_image.read(), np.uint8), cv2.IMREAD_COLOR)
 
-    output_image = util.web_match(img_mat, global_vars.template_mat_map[small_image_name])
+    output_image = img_util.web_match(img_mat, global_vars.template_mat_map[small_image_name])
 
     return jsonify({'output_image': output_image})
 
