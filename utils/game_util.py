@@ -10,6 +10,22 @@ def find_pic(ip, template_name):
     return img_util.match(screenshot, template_name)
 
 
+def find_multiple_pic(ip, template_names):
+    """
+    匹配多种图像
+    :param ip:
+    :param template_names: 模板图像列表 [图像1,图像2]
+    :return: 返回所有匹配到的坐标,如
+    """
+    screenshot = adb_util.screenshot(ip)
+    pic_info = []
+    for item in template_names:
+        match = img_util.match(screenshot, item)
+        if match:
+            pic_info.append((item, match[0], match[1]))
+    return pic_info
+
+
 # 循环匹配
 def loop_match(ip, template_name):
     for i in range(10):
@@ -26,7 +42,7 @@ def loop_match_click(ip, template_name, width, height):
     for i in range(10):
         pic = find_pic(ip, template_name)
         if pic:
-            adb_util.click(ip, pic[0][0], pic[0][1], width, height)
+            adb_util.click(ip, pic[0], pic[1], width, height)
             return True
         else:
             time.sleep(1)
@@ -64,8 +80,8 @@ def into_fb_from_rcwf(ip, template_name, click_area):
         pic = find_pic(ip, template_name)
         if pic:
             # 计算偏移
-            final_x = pic[0][0] + click_area[0]
-            final_y = pic[0][1] + click_area[1]
+            final_x = pic[0] + click_area[0]
+            final_y = pic[1] + click_area[1]
             adb_util.click(ip, final_x, final_y, click_area[2], click_area[3])
             return True
         else:

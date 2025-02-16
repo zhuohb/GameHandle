@@ -31,14 +31,22 @@ def web_match(large_img, small_img, threshold=0.9):
         return None
 
 
-# 模板匹配,返回坐标
 def match(large_img, small_img, threshold=0.9, debug=True):
+    """
+    模板匹配,返回第一个坐标
+    :param large_img: 大图,这里指的是截图
+    :param small_img: 小图,这里指的是模板图像
+    :param threshold: 相似度阈值,最大为1
+    :param debug: 调试开关，开启会保存截图
+    :return: 返回匹配到的第一个坐标,如 (10,10)
+    """
     if small_img is not None:
+        small_img_mat = global_vars.template_mat_map[small_img]
         # 执行模板匹配
-        result = cv2.matchTemplate(large_img, global_vars.template_mat_map[small_img], cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(large_img, small_img_mat, cv2.TM_CCOEFF_NORMED)
         # 找到所有匹配得分大于阈值的位置
         locations = np.where(result >= threshold)
-        h, w, _ = global_vars.template_mat_map[small_img].shape
+        h, w, _ = small_img_mat.shape
 
         coordinates = []
         # 遍历所有匹配位置，收集坐标
@@ -57,7 +65,7 @@ def match(large_img, small_img, threshold=0.9, debug=True):
                 cv2.rectangle(large_img, top_left, bottom_right, (0, 255, 0), 2)
                 output_path = f'debug/output{time.strftime("%Y%m%d%H%M%S", time.localtime())}.jpg'
                 cv2.imwrite(output_path, large_img)
-
-        return coordinates
-    else:
-        return None
+        if coordinates:
+            return coordinates[0]
+    # 没有匹配到 就返回空
+    return None
