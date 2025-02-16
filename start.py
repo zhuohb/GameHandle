@@ -32,7 +32,6 @@ def load_small_images_from_directory(directory):
 
         # 使用 os.walk 递归遍历目录及其子目录
         for root, dirs, files in os.walk(directory):
-            print("1")
             for filename in files:
                 if filename.endswith('.png'):
                     file_path = os.path.join(root, filename)
@@ -49,7 +48,7 @@ def load_small_images_from_directory(directory):
                             var_name = os.path.splitext(filename)[0]
                             # 将加载的图片赋值给全局变量字典
                             global_vars.template_mat_map[var_name] = small_img
-                            print(f"{filename} loaded successfully.")
+                            print(f"{filename} 加载成功.")
                     except Exception as e:
                         print(f"Error loading {filename}: {e}")
     except Exception as e:

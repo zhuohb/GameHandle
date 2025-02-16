@@ -22,7 +22,18 @@ def loop_match(ip, template_name):
 
 
 # 循环匹配
-def loop_match_click(ip, template_name, x, y, width, height):
+def loop_match_click(ip, template_name, width, height):
+    for i in range(10):
+        pic = find_pic(ip, template_name)
+        if pic:
+            adb_util.click(ip, pic[0][0], pic[0][1], width, height)
+            return True
+        else:
+            time.sleep(1)
+    return False
+
+
+def loop_match_click_area(ip, template_name, x, y, width, height):
     for i in range(10):
         pic = find_pic(ip, template_name)
         if pic:
@@ -35,12 +46,16 @@ def loop_match_click(ip, template_name, x, y, width, height):
 
 # 从桌面进入日常玩法
 def into_rcwf_from_desktop(ip):
-    if not loop_match_click(ip, global_vars.模板_桌面_创建队伍, *global_vars.坐标_菜单):
+    if not loop_match_click_area(ip, global_vars.模板_桌面_创建队伍, *global_vars.坐标_菜单):
         print('into_rcwf_from_desktop 步骤1失败')
-    if not loop_match_click(ip, global_vars.模板_菜单_个人主页, *global_vars.坐标_菜单_日常玩法):
+        return False
+    if not loop_match_click_area(ip, global_vars.模板_菜单_个人主页, *global_vars.坐标_菜单_日常玩法):
         print('into_rcwf_from_desktop 步骤2失败')
-    if loop_match(ip, global_vars.模板_菜单_个人主页):
+        return False
+    if not loop_match(ip, global_vars.模板_副本通用_日常玩法_主页):
         print('into_rcwf_from_desktop 步骤3失败')
+        return False
+    return True
 
 
 # 从日常玩法列表进入对应副本
