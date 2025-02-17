@@ -115,8 +115,6 @@ def into_desktop(ip):
     """
     检测广告等,进入桌面
     :param ip:
-    :param template_name:
-    :param click_area:
     :return:
     """
     temp_list = [global_vars.模板_广告_前往商店, global_vars.模板_广告_快乐成长派对, global_vars.模板_广告_日程管理,
