@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>游戏助手</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
 <body>
@@ -15,9 +16,16 @@
     <input type="text" id="templateName" name="templateName" required><br><br>
     <input type="submit" value="测试匹配">
 </form>
-<div id="imageMatchFormMessage"><img src="" alt="Output Image" style="display: none;width: 50%; height: auto"></div>
 
-<script src="{{ url_for('static', filename='index.js') }}"></script>
+<button id="get-coordinates-button">取坐标</button>
+<div id="image-container">
+    <div id="imageMatchFormMessage"><img id="output-image" src="" alt="Output Image" style="display: none;width: 50%; height: auto"></div>
+    <div id="coordinate-display"></div>
+    <div id="zoom-region"></div>
+
+</div>
+<div id="selected-coordinate"></div>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 
 </html>
