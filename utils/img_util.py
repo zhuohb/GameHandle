@@ -41,6 +41,10 @@ def match(large_img, small_img, threshold=0.9, debug=True):
     :return: 返回匹配到的第一个坐标,如 (10,10)
     """
     if small_img is not None:
+        start_time = None
+        if debug:
+            start_time = time.time()
+
         small_img_mat = global_vars.template_mat_map[small_img]
         # 执行模板匹配
         result = cv2.matchTemplate(large_img, small_img_mat, cv2.TM_CCOEFF_NORMED)
@@ -58,6 +62,8 @@ def match(large_img, small_img, threshold=0.9, debug=True):
             coordinates.append(top_left)
 
         if debug:
+            print(f"match 函数执行耗时: {round(time.time() - start_time, 1)} 秒")
+
             # 在大图像上绘制所有匹配的矩形框
             for loc in zip(*locations[::-1]):
                 top_left = loc

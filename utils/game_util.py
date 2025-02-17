@@ -2,6 +2,12 @@ import global_vars
 from utils import adb_util
 from utils import img_util
 import time
+import random
+
+# 定义常量，避免使用魔法值
+NAME_KEY = "name"
+X_KEY = "x"
+Y_KEY = "y"
 
 
 def find_pic(ip, template_name: str | list[str]):
@@ -20,23 +26,24 @@ def find_pic(ip, template_name: str | list[str]):
     for item in template_name:
         match = img_util.match(screenshot, item)
         if match:
-            return item, match[0], match[1]
+            return {item: (match[0], match[1])}
     return None
 
 
-def find_pic_s(ip, template_name_list: list[str]):
+def find_pic_s(ip, template_name_list: list[str], debug=True):
     """
     可以查找多个图片,并且返回所有找到的图像的坐标
+    :param debug:
     :param ip:
     :param template_name_list: 模板图像列表 [图像1,图像2]
     :return: 返回所有匹配到的坐标,如
     """
     screenshot = adb_util.screenshot(ip)
-    pic_info = []
+    pic_info = {}
     for item in template_name_list:
         match = img_util.match(screenshot, item)
         if match:
-            pic_info.append((item, match[0], match[1]))
+            pic_info[item] = (match[0], match[1])
     return pic_info
 
 
@@ -56,7 +63,7 @@ def loop_match_click(ip, template_name, width, height):
     for i in range(10):
         pic = find_pic(ip, template_name)
         if pic:
-            adb_util.click(ip, pic[1], pic[2], width, height)
+            adb_util.click(ip, pic[template_name][0], pic[template_name][1], width, height)
             return True
         else:
             time.sleep(1)
@@ -93,12 +100,44 @@ def into_fb_from_rcwf(ip, template_name, click_area):
         pic = find_pic(ip, template_name)
         if pic:
             # 计算偏移
-            final_x = pic[1] + click_area[0]
-            final_y = pic[2] + click_area[1]
+            final_x = pic[template_name][0] + click_area[0]
+            final_y = pic[template_name][1] + click_area[1]
             adb_util.click(ip, final_x, final_y, click_area[2], click_area[3])
             return True
         else:
             adb_util.swipe(ip, 1100, 413, 500, 413, 500)
             time.sleep(1)
     print('into_fb_from_rcwf 超出循环次数')
+    return False
+
+
+def into_desktop(ip):
+    """
+    检测广告等,进入桌面
+    :param ip:
+    :param template_name:
+    :param click_area:
+    :return:
+    """
+    temp_list = [global_vars.模板_广告_前往商店, global_vars.模板_广告_快乐成长派对, global_vars.模板_广告_日程管理,
+                 global_vars.模板_广告_王中王争霸战, global_vars.模板_广告_首充福利, global_vars.模板_广告_25元,
+                 global_vars.模板_桌面_创建队伍]
+    for i in range(10):
+        pic_info = find_pic_s(ip, temp_list)
+        if global_vars.模板_广告_前往商店 in pic_info or global_vars.模板_广告_首充福利 in pic_info or global_vars.模板_广告_25元 in pic_info:
+            adb_util.click(ip, 1115, 31, 35, 35)
+        elif global_vars.模板_广告_日程管理 in pic_info:
+            adb_util.click(ip, 47, 667, 20, 20)
+            adb_util.click(ip, 1212, 54, 20, 20)
+        elif global_vars.模板_广告_快乐成长派对 in pic_info:
+            adb_util.click(ip, 135, 618, 20, 20)
+            adb_util.click(ip, 1136, 56, 25, 25)
+        elif global_vars.模板_广告_王中王争霸战 in pic_info:
+            adb_util.click(ip, 1040, 86, 30, 30)
+        elif global_vars.模板_桌面_创建队伍 in pic_info:
+            return True
+        else:
+            # 没有其他情况,尝试点击组队按钮
+            adb_util.click(ip, 14, 254, 20, 18)
+    print('into_desktop 超出循环次数')
     return False
