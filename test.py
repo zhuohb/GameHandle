@@ -7,6 +7,7 @@ if __name__ == '__main__':
     directory_path = './image'
     start.load_small_images_from_directory(directory_path)
     adb_util.connect(ip)
-    if game_util.into_desktop(ip):
-        # 材料副本.process(ip)
-        精英副本.process(ip)
+    game_util.close_all(ip)
+    # if game_util.into_desktop(ip):
+    # 材料副本.process(ip)
+    # 精英副本.process(ip)

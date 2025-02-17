@@ -80,6 +80,27 @@ def loop_match_click_area(ip, template_name, x, y, width, height):
     return False
 
 
+def close_all(ip):
+    """
+    关闭所有窗口
+    :param ip:
+    :return:
+    """
+    temp_list = [global_vars.模板_关闭_菜单, global_vars.模板_关闭_日常玩法]
+    for e in range(5):
+        pic_info = find_pic_s(ip, temp_list)
+        pic = None
+        if global_vars.模板_关闭_菜单 in pic_info:
+            pic = pic_info[global_vars.模板_关闭_菜单]
+        elif global_vars.模板_关闭_日常玩法 in pic_info:
+            pic = pic_info[global_vars.模板_关闭_日常玩法]
+        else:
+            print('未检测到关闭按钮')
+            time.sleep(0.2)
+        if pic:
+            adb_util.click(ip, pic[0], pic[1], 20, 20)
+
+
 # 从桌面进入日常玩法
 def into_rcwf_from_desktop(ip):
     if not loop_match_click_area(ip, global_vars.模板_桌面_创建队伍, *global_vars.坐标_菜单):
