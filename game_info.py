@@ -11,7 +11,7 @@ class GlobalConfig:
 
     def __init__(self):
         # 是否每日签到
-        self.isMrqd = False
+        self.isHdMrqd = False
         # 是否宠物加油
         self.isCwjy = False
         # 是否领取每周成长
