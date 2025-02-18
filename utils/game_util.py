@@ -160,3 +160,25 @@ def into_desktop(ip):
             adb_util.click(ip, 14, 254, 20, 18)
     print('into_desktop 超出循环次数')
     return False
+
+
+def calculate_role_page(current_role_index, role_per_page_count):
+    """
+    当前角色所在的页码
+
+    :param current_role_index: 当前角色的索引（从 1 开始）
+    :param role_per_page_count: 每页固定的角色数量
+    :return: 当前角色所在的页码（从 1 开始）
+    """
+    return (current_role_index - 1) // role_per_page_count + 1
+
+
+def calculate_current_role_in_current_page_index(current_role_index, role_per_page_count):
+    """
+    计算当前角色在当前页的索引
+
+    :param current_role_index: 当前角色的索引（从 1 开始）
+    :param role_per_page_count: 每页固定的角色数量
+    :return: 当前角色在当前页的索引（从 1 开始）
+    """
+    return ((current_role_index - 1) % role_per_page_count) + 1
