@@ -90,7 +90,7 @@ def find_pic_s(ip, template_name_list: list[str], debug=True):
 
 # 循环匹配
 def loop_match(ip, template_name):
-    for i in range(10):
+    for i in range(20):
         pic = find_pic(ip, template_name)
         if pic:
             return pic
@@ -101,7 +101,7 @@ def loop_match(ip, template_name):
 
 # 循环匹配
 def loop_match_click(ip, template_name, width, height):
-    for i in range(10):
+    for i in range(20):
         pic = find_pic(ip, template_name)
         if pic:
             adb_util.click(ip, pic[template_name][0], pic[template_name][1], width, height)
@@ -112,7 +112,7 @@ def loop_match_click(ip, template_name, width, height):
 
 
 def loop_match_click_area(ip, template_name, x, y, width, height):
-    for i in range(10):
+    for i in range(20):
         if find_pic(ip, template_name):
             adb_util.click(ip, x, y, width, height)
             return True

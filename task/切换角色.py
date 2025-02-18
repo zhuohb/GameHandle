@@ -1,9 +1,7 @@
-import time
-
+import global_vars
 from game_info import GameInfo
 from utils import adb_util
 from utils import game_util
-import global_vars
 
 
 def process(ip, game_info: GameInfo):
