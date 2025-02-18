@@ -6,6 +6,8 @@ import global_vars
 
 def process(ip):
     print('----- 开始精英副本 -----')
+    if not game_util.into_desktop(ip):
+        return False
     # 从桌面到日常玩法
     if not game_util.into_rcwf_from_desktop(ip):
         return False
@@ -17,6 +19,7 @@ def process(ip):
         return False
     # 是否已完成
     if is_complete(ip):
+        game_util.close_all(ip)
         return True
     # 点击确定
     if not game_util.loop_match_click(ip, global_vars.模板_副本通用_确定, 45, 25):
@@ -30,7 +33,7 @@ def process(ip):
             time.sleep(1)
             pic_info_2 = game_util.find_pic(ip, global_vars.模板_副本通用_离开)
             if pic_info_2:
-                adb_util.click(ip, pic_info_2[1], pic_info_2[2], 60, 20)
+                adb_util.click(ip, pic_info_2[global_vars.模板_副本通用_离开][0], pic_info_2[global_vars.模板_副本通用_离开][1], 60, 20)
                 time.sleep(1)
                 print('----- 结束精英副本 -----')
                 return True

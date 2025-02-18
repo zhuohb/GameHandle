@@ -1,13 +1,54 @@
+import os
+import time
+
+import cv2
+import numpy as np
+
 import global_vars
 from utils import adb_util
 from utils import img_util
-import time
-import random
 
-# 定义常量，避免使用魔法值
-NAME_KEY = "name"
-X_KEY = "x"
-Y_KEY = "y"
+
+def load_template_images_from_directory(directory):
+    """
+    从目录加载模板图像
+    加载进内存减少资源消耗
+    :param directory: 模板图像所在的目录,基于项目的相对地址
+    :return:
+    """
+    try:
+        # 检查目录是否存在
+        if not os.path.exists(directory):
+            print(f"目录 {directory} 不存在.")
+            return
+
+        # 使用 os.walk 递归遍历目录及其子目录
+        for root, dirs, files in os.walk(directory):
+            for filename in files:
+                if filename.endswith('.png'):
+                    file_path = os.path.join(root, filename)
+                    try:
+                        # 以二进制模式读取图片文件
+                        with open(file_path, 'rb') as f:
+                            img_array = np.asarray(bytearray(f.read()), dtype=np.uint8)
+                        # 解码图片数据
+                        small_img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+                        if small_img is None:
+                            print(f"加载失败 {filename}.")
+                        else:
+                            # 去掉文件扩展名，作为全局变量的键
+                            var_name = os.path.splitext(filename)[0]
+                            # 先检查是否重名
+                            if var_name in global_vars.template_mat_map:
+                                print(f'模板图像重名:{var_name}')
+                            else:
+                                # 将加载的图片赋值给全局变量字典
+                                global_vars.template_mat_map[var_name] = small_img
+                                print(f"加载成功 {filename}")
+                    except Exception as e:
+                        print(f"加载时出错 {filename}: {e}")
+    except Exception as e:
+        print(f"访问目录时出错: {e}")
 
 
 def find_pic(ip, template_name: str | list[str]):
@@ -90,10 +131,10 @@ def close_all(ip):
     for e in range(5):
         pic_info = find_pic_s(ip, temp_list)
         pic = None
-        if global_vars.模板_关闭_菜单 in pic_info:
-            pic = pic_info[global_vars.模板_关闭_菜单]
-        elif global_vars.模板_关闭_日常玩法 in pic_info:
+        if global_vars.模板_关闭_日常玩法 in pic_info:
             pic = pic_info[global_vars.模板_关闭_日常玩法]
+        elif global_vars.模板_关闭_菜单 in pic_info:
+            pic = pic_info[global_vars.模板_关闭_菜单]
         else:
             print('未检测到关闭按钮')
             time.sleep(0.2)

@@ -62,7 +62,7 @@ def match(large_img, small_img, threshold=0.9, debug=True):
             coordinates.append(top_left)
 
         if debug:
-            print(f"match 函数执行耗时: {round(time.time() - start_time, 1)} 秒")
+            # print(f"match 函数执行耗时: {round(time.time() - start_time, 1)} 秒")
 
             # 在大图像上绘制所有匹配的矩形框
             for loc in zip(*locations[::-1]):

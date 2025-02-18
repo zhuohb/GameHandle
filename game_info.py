@@ -69,9 +69,11 @@ class GameInfo:
     统筹所有配置信息
     """
 
-    def __init__(self, role_total, current_role_index, global_config: GlobalConfig, role_config_list: list[RoleConfig]):
+    def __init__(self, role_total, current_role_index, role_model, global_config: GlobalConfig, role_config_list: list[RoleConfig]):
         # 每页固定角色数量
         self.rolePerPageCount = 7
+        # 角色模式,单角色还是多角色
+        self.roleModel = role_model
         # 角色总数,从1开始.从0还刷鸡毛
         self.roleTotal = role_total
         # 当前角色索引,从1开始
