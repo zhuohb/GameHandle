@@ -1,11 +1,12 @@
 import sys
 
 from game_info import GameInfo, GlobalConfig, RoleConfig, SINGLE_ROLE_MODEL
-from task import 材料副本, 精英副本, 切换角色
+from task import 材料副本, 精英副本, 切换角色, 公会任务
 from utils import adb_util, game_util
 
 if __name__ == '__main__':
-    ip = '192.168.1.70:5555'
+    # ip = '192.168.1.70:5555'
+    ip = '192.168.3.48:5555'
     # 加载模板图像
     game_util.load_template_images_from_directory('./image')
     # 角色全局配置
@@ -32,12 +33,13 @@ if __name__ == '__main__':
     # 从指定的角色索引开始
     切换角色.process(ip, game_info)
 
-
     # 到这个就开始刷了,当前角色索引小于或等于角色总数时才可以刷
     while game_info.currentRoleIndex <= game_info.roleTotal:
         # todo 还没有传入角色自己的配置
-        材料副本.process(ip)
-        精英副本.process(ip)
+        role_config = role_config_list[game_info.currentRoleIndex - 1]
+        公会任务.process(ip, role_config)
+        # 材料副本.process(ip)
+        # 精英副本.process(ip)
         # 任务结束之后角色索引+1
         game_info.currentRoleIndex = game_info.currentRoleIndex + 1
         # 然后切换角色

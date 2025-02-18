@@ -12,7 +12,7 @@ def process(ip):
     if not game_util.into_rcwf_from_desktop(ip):
         return False
     # 从日常玩法到相应副本
-    if not game_util.into_fb_from_rcwf(ip, global_vars.模板_材料副本_入口, global_vars.坐标_材料副本_入口):
+    if not game_util.into_fb_from_rcwf(ip, global_vars.模板_材料副本_入口, global_vars.坐标_副本_入口):
         return False
     # 确定主页
     if not game_util.loop_match(ip, global_vars.模板_材料副本_主页):
