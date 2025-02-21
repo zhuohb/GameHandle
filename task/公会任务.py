@@ -46,17 +46,13 @@ def execute_tasks(ip, game_config: RoleConfig):
     # 等待自动签到
     time.sleep(3)
     # 领取签到奖励
-    adb_util.click(ip, 1159, 110, 50, 20)
+    adb_util.click(ip, *global_vars.坐标_公会_签到奖励)
     # 领取公会任务奖励
     if game_config.isGhrwlq:
-        # 公会_任务
-        adb_util.click(ip, 35, 477, 85, 25)
-        # 公会_任务_全部领取
-        adb_util.click(ip, 1123, 667, 85, 20)
-        # 公会_任务_每周
-        adb_util.click(ip, 448, 106, 90, 25)
-        # 公会_任务_全部领取
-        adb_util.click(ip, 1123, 667, 85, 20)
+        adb_util.click(ip, *global_vars.坐标_公会_任务入口)
+        adb_util.click(ip, *global_vars.坐标_公会_全部领取)
+        adb_util.click(ip, *global_vars.坐标_公会_每周任务)
+        adb_util.click(ip, *global_vars.坐标_公会_全部领取)
 
     game_util.close_all(ip)
 
@@ -65,17 +61,14 @@ def execute_tasks(ip, game_config: RoleConfig):
 def join_guild(ip):
     print("执行加入公会操作")
     # 点击加入公会
-    adb_util.click(ip, 547, 353, 200, 140)
-    # 查找公会目录模板
+    adb_util.click(ip, *global_vars.坐标_公会_加入按钮)
     pic = game_util.loop_match(ip, global_vars.模板_公会_公会目录)
     if not pic:
         return
     # 点击公会目录
     adb_util.click(ip, pic[global_vars.模板_公会_公会目录][0], pic[global_vars.模板_公会_公会目录][1], 70, 20)
-    # 点击快速加入
-    adb_util.click(ip, 646, 668, 100, 30)
-    # 确定加入
-    adb_util.click(ip, 742, 515, 100, 30)
+    adb_util.click(ip, *global_vars.坐标_公会_快速加入)
+    adb_util.click(ip, *global_vars.坐标_公会_确认加入)
     # 检查是否成功加入公会
     if game_util.loop_match(ip, global_vars.模板_公会_公会信息):
         game_util.close_all(ip)
