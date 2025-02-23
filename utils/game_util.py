@@ -194,6 +194,7 @@ def fb_prefix(ip, rk_name, zy_name):
     # 确定主页
     if not loop_match(ip, zy_name):
         return False
+    return True
 
 
 def calculate_role_page(current_role_index, role_per_page_count):

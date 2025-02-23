@@ -1,35 +1,31 @@
-import sys
+import threading  # 新增线程支持
 
 from game_info import GameInfo, GlobalConfig, RoleConfig, SINGLE_ROLE_MODEL
-from task import 材料副本, 精英副本, 切换角色, 公会任务
+from task import 材料副本, 切换角色, 公会任务, 周常副本
 from utils import adb_util, game_util
 
-if __name__ == '__main__':
-    # ip = '192.168.1.70:5555'
-    ip = '192.168.3.48:5555'
-    # 加载模板图像
-    game_util.load_template_images_from_directory('./image')
+
+def start(ip):
     # 角色全局配置
     global_config = GlobalConfig()
     global_config.isMrqd = True
     # 三个角色
     role_config_list = []
-    for e in range(3):
+    for e in range(6):
         role_config = RoleConfig()
         role_config.isClfb = True
         role_config_list.append(role_config)
     # 组装角色的配置信息
-    game_info = GameInfo(3, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
+    game_info = GameInfo(6, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
 
     # 前置任务: 连接设备
     if not adb_util.connect(ip):
-        print('连接设备失败')
-        # 退出状态码为 1 表示异常退出
-        sys.exit(1)
+        print(f'连接设备{ip}失败')  # 添加IP显示
+        return  # 修改退出方式
     # 前置任务: 进入桌面
     if not game_util.into_desktop(ip):
-        print('进入桌面失败')
-        sys.exit(1)
+        print(f'{ip} 进入桌面失败')
+        return  # 修改退出方式
     # 从指定的角色索引开始
     切换角色.process(ip, game_info)
 
@@ -38,9 +34,30 @@ if __name__ == '__main__':
         # todo 还没有传入角色自己的配置
         role_config = role_config_list[game_info.currentRoleIndex - 1]
         公会任务.process(ip, role_config)
-        # 材料副本.process(ip)
+        材料副本.process(ip)
         # 精英副本.process(ip)
+        周常副本.process(ip)
+
         # 任务结束之后角色索引+1
         game_info.currentRoleIndex = game_info.currentRoleIndex + 1
         # 然后切换角色
         切换角色.process(ip, game_info)
+
+
+if __name__ == '__main__':
+    ip_list = [
+        '192.168.3.49:5555',
+        '192.168.3.48:5555'
+    ]
+    # 加载模板图像
+    game_util.load_template_images_from_directory('./image')
+    # 创建线程池
+    threads = []
+    for ip in ip_list:
+        thread = threading.Thread(target=start, args=(ip,))
+        thread.start()
+        threads.append(thread)
+
+    # 等待所有线程完成
+    for thread in threads:
+        thread.join()

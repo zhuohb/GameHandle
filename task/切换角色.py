@@ -7,7 +7,8 @@ from utils import game_util
 def process(ip, game_info: GameInfo):
     print('----- 开始切换角色 -----')
     # 当前角色的索引
-
+    if not game_util.into_desktop(ip):
+        return False
     # 判断角色索引是否大于角色总数
     if game_info.currentRoleIndex > game_info.roleTotal:
         print("角色索引大于角色总数,退出流程")
