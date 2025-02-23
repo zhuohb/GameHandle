@@ -6,16 +6,7 @@ import global_vars
 
 def process(ip):
     print('----- 开始材料副本 -----')
-    if not game_util.into_desktop(ip):
-        return False
-    # 从桌面到日常玩法
-    if not game_util.into_rcwf_from_desktop(ip):
-        return False
-    # 从日常玩法到相应副本
-    if not game_util.into_fb_from_rcwf(ip, global_vars.模板_材料副本_入口, global_vars.坐标_副本_入口):
-        return False
-    # 确定主页
-    if not game_util.loop_match(ip, global_vars.模板_材料副本_主页):
+    if not game_util.fb_prefix(ip, global_vars.模板_材料副本_入口, global_vars.模板_材料副本_主页):
         return False
     # 是否已完成
     if is_complete(ip):

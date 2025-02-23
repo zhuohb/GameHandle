@@ -175,6 +175,27 @@ def into_desktop(ip):
     return False
 
 
+def fb_prefix(ip, rk_name, zy_name):
+    """
+    副本前缀
+    :param rk_name:  入口模板
+    :param zy_name:  主页模板
+    :param ip:
+    :return:
+    """
+    if not into_desktop(ip):
+        return False
+    # 从桌面到日常玩法
+    if not into_rcwf_from_desktop(ip):
+        return False
+    # 从日常玩法到相应副本
+    if not into_fb_from_rcwf(ip, rk_name, global_vars.坐标_副本_入口):
+        return False
+    # 确定主页
+    if not loop_match(ip, zy_name):
+        return False
+
+
 def calculate_role_page(current_role_index, role_per_page_count):
     """
     当前角色所在的页码
