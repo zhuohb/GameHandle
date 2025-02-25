@@ -1,7 +1,9 @@
 import os
 import time
+
 import cv2
 import numpy as np
+
 import global_vars
 from utils import adb_util, img_util
 
@@ -106,12 +108,17 @@ def close_all(ip):
     :param ip:
     :return:
     """
-    temp_list = [global_vars.模板_关闭_菜单, global_vars.模板_关闭_日常玩法]
+    temp_list = [global_vars.模板_关闭_菜单, global_vars.模板_关闭_日常玩法, global_vars.模板_桌面_创建队伍]
     for _ in range(5):
         pic_info = find_pic_s(ip, temp_list)
-        pic = pic_info.get(global_vars.模板_关闭_日常玩法) or pic_info.get(global_vars.模板_关闭_菜单)
-        if pic:
+        if global_vars.模板_关闭_日常玩法 in pic_info:
+            pic = pic_info[global_vars.模板_关闭_日常玩法]
+            adb_util.click(ip, pic[0], pic[1], 30, 30)
+        elif global_vars.模板_关闭_菜单 in pic_info:
+            pic = pic_info[global_vars.模板_关闭_菜单]
             adb_util.click(ip, pic[0], pic[1], 20, 20)
+        elif global_vars.模板_桌面_创建队伍 in pic_info:
+            return True
         else:
             print('未检测到关闭按钮')
             time.sleep(0.2)

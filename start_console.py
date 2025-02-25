@@ -1,4 +1,4 @@
-import threading  # 新增线程支持
+import threading
 
 from game_info import GameInfo, GlobalConfig, RoleConfig, SINGLE_ROLE_MODEL
 from task import 材料副本, 切换角色, 公会任务, 周常副本
@@ -20,18 +20,17 @@ def start(ip):
 
     # 前置任务: 连接设备
     if not adb_util.connect(ip):
-        print(f'连接设备{ip}失败')  # 添加IP显示
-        return  # 修改退出方式
+        print(f'连接设备{ip}失败')
+        return
     # 前置任务: 进入桌面
     if not game_util.into_desktop(ip):
         print(f'{ip} 进入桌面失败')
-        return  # 修改退出方式
+        return
     # 从指定的角色索引开始
     切换角色.process(ip, game_info)
 
     # 到这个就开始刷了,当前角色索引小于或等于角色总数时才可以刷
     while game_info.currentRoleIndex <= game_info.roleTotal:
-        # todo 还没有传入角色自己的配置
         role_config = role_config_list[game_info.currentRoleIndex - 1]
         公会任务.process(ip, role_config)
         材料副本.process(ip)
@@ -46,15 +45,15 @@ def start(ip):
 
 if __name__ == '__main__':
     ip_list = [
-        '192.168.3.49:5555',
-        '192.168.3.48:5555'
+        '192.168.3.56:5555',
+        # '192.168.3.48:5555'
     ]
     # 加载模板图像
     game_util.load_template_images_from_directory('./image')
     # 创建线程池
     threads = []
-    for ip in ip_list:
-        thread = threading.Thread(target=start, args=(ip,))
+    for item in ip_list:
+        thread = threading.Thread(target=start, args=(item,))
         thread.start()
         threads.append(thread)
 
