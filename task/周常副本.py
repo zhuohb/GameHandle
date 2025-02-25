@@ -6,11 +6,10 @@ import global_vars
 
 def process(ip):
     print('----- 开始周常副本 -----')
-    if not game_util.fb_prefix(ip, global_vars.模板_周常副本_入口, global_vars.模板_周常副本_主页):
+    if not game_util.into_fbzy_from_desktop(ip, global_vars.模板_周常副本_入口, global_vars.模板_周常副本_主页):
         return False
     # 是否已完成
-    temp_list = [global_vars.模板_副本通用_入场, global_vars.模板_副本通用_入场_已完成]
-    multiple_pic = game_util.find_pic_s(ip, temp_list)
+    multiple_pic = game_util.find_pic_s(ip, [global_vars.模板_副本通用_入场, global_vars.模板_副本通用_入场_已完成])
     if global_vars.模板_副本通用_入场_已完成 in multiple_pic:
         print('副本已完成')
         game_util.close_all(ip)

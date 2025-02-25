@@ -153,6 +153,7 @@ def into_desktop(ip):
     temp_list = [
         global_vars.模板_广告_前往商店, global_vars.模板_广告_快乐成长派对, global_vars.模板_广告_日程管理,
         global_vars.模板_广告_王中王争霸战, global_vars.模板_广告_首充福利, global_vars.模板_广告_25元,
+        global_vars.模板_关闭_菜单, global_vars.模板_关闭_日常玩法,
         global_vars.模板_桌面_创建队伍
     ]
     for _ in range(10):
@@ -167,6 +168,12 @@ def into_desktop(ip):
             adb_util.click(ip, 1136, 56, 25, 25)
         elif global_vars.模板_广告_王中王争霸战 in pic_info:
             adb_util.click(ip, 1040, 86, 30, 30)
+        elif global_vars.模板_关闭_菜单 in pic_info:
+            temp_pic = pic_info[global_vars.模板_关闭_菜单]
+            adb_util.click(ip, temp_pic[0], temp_pic[1], 20, 20)
+        elif global_vars.模板_关闭_日常玩法 in pic_info:
+            temp_pic = pic_info[global_vars.模板_关闭_菜单]
+            adb_util.click(ip, temp_pic[0], temp_pic[1], 20, 20)
         elif global_vars.模板_桌面_创建队伍 in pic_info:
             return True
         else:
@@ -175,9 +182,9 @@ def into_desktop(ip):
     return False
 
 
-def fb_prefix(ip, rk_name, zy_name):
+def into_fbzy_from_desktop(ip, rk_name, zy_name):
     """
-    副本前缀
+    从桌面进入副本主页
     :param rk_name:  入口模板
     :param zy_name:  主页模板
     :param ip:

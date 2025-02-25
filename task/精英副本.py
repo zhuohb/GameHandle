@@ -6,7 +6,7 @@ import global_vars
 
 def process(ip):
     print('----- 开始精英副本 -----')
-    if not game_util.fb_prefix(ip, global_vars.模板_精英副本_入口, global_vars.模板_精英副本_主页):
+    if not game_util.into_fbzy_from_desktop(ip, global_vars.模板_精英副本_入口, global_vars.模板_精英副本_主页):
         return False
     # 是否已完成
     if is_complete(ip):

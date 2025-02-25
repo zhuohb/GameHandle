@@ -6,7 +6,7 @@ import global_vars
 
 def process(ip):
     print('----- 开始材料副本 -----')
-    if not game_util.fb_prefix(ip, global_vars.模板_材料副本_入口, global_vars.模板_材料副本_主页):
+    if not game_util.into_fbzy_from_desktop(ip, global_vars.模板_材料副本_入口, global_vars.模板_材料副本_主页):
         return False
     # 是否已完成
     multiple_pic = game_util.find_pic_s(ip, [global_vars.模板_副本通用_入场, global_vars.模板_副本通用_入场_已完成])
