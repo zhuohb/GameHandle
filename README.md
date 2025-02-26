@@ -4,3 +4,4 @@
        flask 3.1.0
        opencv 4.11.0.86
        jinja2 3.1.5
+       easyocr 1.7.2

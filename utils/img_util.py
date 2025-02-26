@@ -38,13 +38,9 @@ def match(large_img, small_img, threshold=0.9, debug=True):
     :param small_img: 小图,这里指的是模板图像
     :param threshold: 相似度阈值,最大为1
     :param debug: 调试开关，开启会保存截图
-    :return: 返回匹配到的第一个坐标,如 (10,10)
+    :return: 返回匹配到的所有坐标,如 [(10,10),(10,10)]
     """
     if small_img is not None:
-        start_time = None
-        if debug:
-            start_time = time.time()
-
         small_img_mat = global_vars.template_mat_map[small_img]
         # 执行模板匹配
         result = cv2.matchTemplate(large_img, small_img_mat, cv2.TM_CCOEFF_NORMED)
@@ -62,16 +58,13 @@ def match(large_img, small_img, threshold=0.9, debug=True):
             coordinates.append(top_left)
 
         if debug:
-            # print(f"match 函数执行耗时: {round(time.time() - start_time, 1)} 秒")
-
             # 在大图像上绘制所有匹配的矩形框
-            for loc in zip(*locations[::-1]):
-                top_left = loc
+            for top_left in coordinates:
                 bottom_right = (top_left[0] + w, top_left[1] + h)
-                cv2.rectangle(large_img, top_left, bottom_right, (0, 255, 0), 2)
-                output_path = f'debug/output{time.strftime("%Y%m%d%H%M%S", time.localtime())}.jpg'
-                cv2.imwrite(output_path, large_img)
+                cv2.rectangle(large_img, top_left, bottom_right, (0, 255, 0), 1)
+            output_path = f'debug/output{time.strftime("%Y%m%d%H%M%S", time.localtime())}.jpg'
+            cv2.imwrite(output_path, large_img)
         if coordinates:
-            return coordinates[0]
+            return coordinates
     # 没有匹配到 就返回空
     return None
