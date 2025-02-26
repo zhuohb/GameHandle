@@ -59,9 +59,7 @@ def get_coordinate_matrix():
 # 遍历坐标矩阵
 def fill_number_matrix(coordinate_matrix, match_coordinate_list, number_matrix, number):
     for i in range(10):
-        print(f'正在处理第{i}行')
         for j in range(13):
-            print(f'正在处理第{j}列')
             x, y = coordinate_matrix[i][j]
             # 检查是否在任何一个矩形中
             for rect in match_coordinate_list:
