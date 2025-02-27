@@ -53,7 +53,7 @@ def find_pic(ip, template_name):
     for item in template_name:
         match = img_util.match(screenshot, item)
         if match:
-            return {item: (match[0], match[1])}
+            return {item: (match[0][0], match[0][1])}
     return None
 
 
@@ -70,7 +70,7 @@ def find_pic_s(ip, template_name_list, debug=True):
     for item in template_name_list:
         match = img_util.match(screenshot, item)
         if match:
-            pic_info[item] = (match[0], match[1])
+            pic_info[item] = (match[0][0], match[0][1])
     return pic_info
 
 

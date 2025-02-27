@@ -31,7 +31,7 @@ def 领取个人邮件(ip):
         print('步骤2失败')
         return False
     # todo 个人坐标未测量
-    if not game_util.loop_match_click_area(ip, global_vars.模板_邮件_主页, 0, 0, 0, 0):
+    if not game_util.loop_match_click_area(ip, global_vars.模板_邮件_主页, 389,117, 90,25):
         return False
     if not game_util.loop_match(ip, global_vars.模板_邮件_个人):
         return False
