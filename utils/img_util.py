@@ -31,7 +31,7 @@ def web_match(large_img, small_img, threshold=0.9):
         return None
 
 
-def match(large_img, small_img, threshold=0.9, debug=True):
+def match(large_img, small_img, threshold=0.9, debug=False):
     """
     模板匹配,返回第一个坐标
     :param large_img: 大图,这里指的是截图

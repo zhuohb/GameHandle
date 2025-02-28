@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 import global_vars
-from utils import img_util, game_util
+from utils import img_util, game_util, adb_util
 
 
 def test():
@@ -30,7 +30,6 @@ def test():
 
 
 # 获取坐标矩阵,也就是截图中每个数字的中心坐标
-
 def get_coordinate_matrix():
     # 生成x和y坐标列表，分别对应10个和13个元素
     # [64, 130, 196, 262, 328, 394, 460, 526, 592, 658, 724, 790, 856]
@@ -52,7 +51,6 @@ def get_coordinate_matrix():
             else:
                 # 表示超出范围
                 matrix[i, j] = (-1, -1)
-
     return matrix
 
 
@@ -70,22 +68,60 @@ def fill_number_matrix(coordinate_matrix, match_coordinate_list, number_matrix, 
                     break
 
 
-def process():
+def process(screenshot):
     # 获取坐标矩阵
     coordinate_matrix = get_coordinate_matrix()
     # 初始化结果矩阵
     result_matrix = [[-1 for _ in range(13)] for _ in range(10)]
     number_list = ['矩阵数字1', '矩阵数字2', '矩阵数字3', '矩阵数字4', '矩阵数字5', '矩阵数字6', '矩阵数字7', '矩阵数字8']
     for index, main_e in enumerate(number_list):
-        result = img_util.match(cv2.imread('xx.png'), main_e, threshold=0.99)
+        # result = img_util.match(cv2.imread('xx.png'), main_e, threshold=0.99)
+        result = img_util.match(screenshot, main_e, threshold=0.99)
         fill_number_matrix(coordinate_matrix, result, result_matrix, index + 1)
 
     print(f'结果矩阵: {result_matrix}')
+    return result_matrix
+
+
 
 # 深度优先搜索列出组合
-def dfs():
-    pass
+def dfs(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0]) if rows > 0 else 0
+    visited = [[False for _ in range(cols)] for _ in range(rows)]
+    result = []
+
+    def dfs(i, j, current_sum, path, visited):
+        if current_sum == 10:
+            result.append(path.copy())
+            return
+        if current_sum > 10 or len(path) >= 4:
+            return
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        for dx, dy in directions:
+            x = i + dx
+            y = j + dy
+            if 0 <= x < rows and 0 <= y < cols and not visited[x][y]:
+                visited[x][y] = True
+                new_sum = current_sum + matrix[x][y]
+                new_path = path + [(x, y)]
+                dfs(x, y, new_sum, new_path, visited.copy())
+                # 重复使用当前数字
+                # visited[x][y] = False
+
+    for i in range(rows):
+        for j in range(cols):
+            visited[i][j] = True
+            dfs(i, j, matrix[i][j], [(i, j)], visited.copy())
+            # 重复使用当前数字
+            # visited[i][j] = False
+    return result
 
 if __name__ == '__main__':
     game_util.load_template_images_from_directory('../image')
-    process()
+    ip = '192.168.1.134:5555'
+    adb_util.connect(ip)
+    screenshot = adb_util.screenshot(ip)
+    l = process(screenshot)
+    dfs1 = dfs(l)
+    print(dfs1)

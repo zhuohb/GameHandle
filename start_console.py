@@ -1,7 +1,8 @@
 import threading
+import time
 
 from game_info import GameInfo, GlobalConfig, RoleConfig, SINGLE_ROLE_MODEL
-from task import 材料副本, 切换角色, 公会任务, 周常副本
+from task import 材料副本, 切换角色, 公会任务, 周常副本, 领取自动战斗时间
 from utils import adb_util, game_util
 
 
@@ -11,12 +12,13 @@ def start(ip):
     global_config.isMrqd = True
     # 三个角色
     role_config_list = []
-    for e in range(6):
+    for e in range(31):
         role_config = RoleConfig()
         role_config.isClfb = True
+        role_config.selectClfbType = '5'
         role_config_list.append(role_config)
     # 组装角色的配置信息
-    game_info = GameInfo(6, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
+    game_info = GameInfo(31, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
 
     # 前置任务: 连接设备
     if not adb_util.connect(ip):
@@ -33,10 +35,11 @@ def start(ip):
     while game_info.currentRoleIndex <= game_info.roleTotal:
         role_config = role_config_list[game_info.currentRoleIndex - 1]
         公会任务.process(ip, role_config)
-        材料副本.process(ip)
+        材料副本.process(ip,role_config)
         # 精英副本.process(ip)
         周常副本.process(ip)
 
+        领取自动战斗时间.process(ip)
         # 任务结束之后角色索引+1
         game_info.currentRoleIndex = game_info.currentRoleIndex + 1
         # 然后切换角色
@@ -45,7 +48,7 @@ def start(ip):
 
 if __name__ == '__main__':
     ip_list = [
-        '192.168.3.56:5555',
+        '192.168.1.126:5555',
         # '192.168.3.48:5555'
     ]
     # 加载模板图像
@@ -56,6 +59,7 @@ if __name__ == '__main__':
         thread = threading.Thread(target=start, args=(item,))
         thread.start()
         threads.append(thread)
+        time.sleep(1)
 
     # 等待所有线程完成
     for thread in threads:

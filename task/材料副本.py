@@ -1,10 +1,12 @@
 import time
+
+from game_info import RoleConfig
 from utils import adb_util
 from utils import game_util
 import global_vars
 
 
-def process(ip):
+def process(ip, game_config: RoleConfig):
     print('----- 开始材料副本 -----')
     if not game_util.into_fbzy_from_desktop(ip, global_vars.模板_材料副本_入口, global_vars.模板_材料副本_主页):
         return False
@@ -15,6 +17,11 @@ def process(ip):
         game_util.close_all(ip)
         return True
     elif global_vars.模板_副本通用_入场 in multiple_pic:
+        # 选择副本
+        if not game_config.selectClfbType == '0':
+            type = global_vars.材料副本类型[game_config.selectClfbType]
+            adb_util.click(ip, type[0], type[1], 90, 30)
+
         pic = multiple_pic[global_vars.模板_副本通用_入场]
         adb_util.click(ip, pic[0], pic[1], 90, 25)
     else:

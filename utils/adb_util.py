@@ -38,7 +38,7 @@ def swipe(ip, x1, y1, x2, y2, duration):
         return False
 
 
-def screenshot(ip, debug=True):
+def screenshot(ip, debug=False):
     try:
         start_time = None
         if debug:
