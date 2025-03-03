@@ -44,7 +44,7 @@ def process(ip, game_config: RoleConfig):
 def execute_tasks(ip, game_config: RoleConfig):
     print("执行各种公会任务")
     # 等待自动签到
-    time.sleep(3)
+    time.sleep(5)
     # 领取签到奖励
     adb_util.click(ip, *global_vars.坐标_公会_签到奖励)
     # 领取公会任务奖励
