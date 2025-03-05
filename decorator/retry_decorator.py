@@ -15,7 +15,6 @@ def retry(max_retries=3, delay=2, custom_func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            print(f"参数: args={args}, kwargs={kwargs}")
             retries = 0
             while retries < max_retries:
                 try:
