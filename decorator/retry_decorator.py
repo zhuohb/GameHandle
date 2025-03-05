@@ -4,9 +4,10 @@ from functools import wraps
 
 
 # 定义重试装饰器
-def retry(max_retries=3, delay=2):
+def retry(max_retries=3, delay=2, custom_func=None):
     """
     重试装饰器，当函数执行失败时自动重试。
+    :param custom_func: 自定义函数
     :param max_retries: 最大重试次数（默认3次）
     :param delay: 重试间隔（默认2秒）
     """
@@ -14,18 +15,23 @@ def retry(max_retries=3, delay=2):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            print(f"参数: args={args}, kwargs={kwargs}")
             retries = 0
             while retries < max_retries:
                 try:
                     return func(*args, **kwargs)
                 except subprocess.CalledProcessError as e:
                     print(f"函数执行失败: {e}")
+                    if custom_func:
+                        custom_func(*args, **kwargs)
                     print(f"重试中... ({retries + 1}/{max_retries})")
                     time.sleep(delay)
                     retries += 1
             print(f"重试{max_retries}次后命令失败,中止")
             return None  # 返回None表示命令失败
+
         return wrapper
+
     return decorator
 
 
