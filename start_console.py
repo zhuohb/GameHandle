@@ -18,7 +18,7 @@ def start(ip):
         # role_config.selectClfbType = '5'
         role_config_list.append(role_config)
     # 组装角色的配置信息
-    game_info = GameInfo(31, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
+    game_info = GameInfo(6, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
 
     # 前置任务: 连接设备
     if not adb_util.connect(ip):
