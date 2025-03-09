@@ -1,7 +1,7 @@
 import threading
 import time
 
-from game_info import GameInfo, GlobalConfig, RoleConfig, SINGLE_ROLE_MODEL
+import 角色配置
 from task import 材料副本, 切换角色, 公会任务, 周常副本, 领取自动战斗时间, 邮件任务
 from utils import adb_util, game_util
 
@@ -37,7 +37,7 @@ def start(ip, game_info):
 
 if __name__ == '__main__':
     ip_list = [
-        '192.168.1.70:5555',
+        {'ip': '192.168.1.70:5555', '配置': 角色配置.小黑子},
         # '192.168.3.48:5555'
     ]
     # 加载模板图像
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     # 创建线程池
     threads = []
     for item in ip_list:
-        thread = threading.Thread(target=start, args=(item,))
+        thread = threading.Thread(target=start, args=(item['ip'], item['配置'],))
         thread.start()
         threads.append(thread)
         time.sleep(1)
