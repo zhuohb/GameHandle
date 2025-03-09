@@ -6,20 +6,7 @@ from task import 材料副本, 切换角色, 公会任务, 周常副本, 领取�
 from utils import adb_util, game_util
 
 
-def start(ip):
-    # 角色全局配置
-    global_config = GlobalConfig()
-    global_config.isMrqd = True
-    # 三个角色
-    role_config_list = []
-    for e in range(6):
-        role_config = RoleConfig()
-        role_config.isClfb = True
-        # role_config.selectClfbType = '5'
-        role_config_list.append(role_config)
-    # 组装角色的配置信息
-    game_info = GameInfo(6, 1, SINGLE_ROLE_MODEL, global_config, role_config_list)
-
+def start(ip, game_info):
     # 前置任务: 连接设备
     if not adb_util.connect(ip):
         print(f'连接设备{ip}失败')
@@ -32,8 +19,8 @@ def start(ip):
     切换角色.process(ip, game_info)
 
     # 到这个就开始刷了,当前角色索引小于或等于角色总数时才可以刷
-    while game_info.currentRoleIndex <= game_info.roleTotal:
-        role_config = role_config_list[game_info.currentRoleIndex - 1]
+    while game_info['当前角色索引'] <= game_info['角色总数']:
+        role_config = game_info['角色配置列表'][game_info['当前角色索引'] - 1]
         公会任务.process(ip, role_config)
         邮件任务.领取个人邮件(ip)
         材料副本.process(ip, role_config)
@@ -43,7 +30,7 @@ def start(ip):
         邮件任务.领取个人邮件(ip)
         领取自动战斗时间.process(ip)
         # 任务结束之后角色索引+1
-        game_info.currentRoleIndex = game_info.currentRoleIndex + 1
+        game_info['当前角色索引'] = game_info['当前角色索引'] + 1
         # 然后切换角色
         切换角色.process(ip, game_info)
 

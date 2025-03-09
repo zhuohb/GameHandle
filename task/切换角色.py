@@ -1,18 +1,17 @@
 import time
 
 import global_vars
-from game_info import GameInfo
 from utils import adb_util
 from utils import game_util
 
 
-def process(ip, game_info: GameInfo):
+def process(ip, game_info):
     print('----- 开始切换角色 -----')
     # 当前角色的索引
     if not game_util.into_desktop(ip):
         return False
     # 判断角色索引是否大于角色总数
-    if game_info.currentRoleIndex > game_info.roleTotal:
+    if game_info['当前角色索引'] > game_info['角色总数']:
         print("角色索引大于角色总数,退出流程")
         return False
     # 从桌面点击菜单
@@ -29,7 +28,7 @@ def process(ip, game_info: GameInfo):
         return False
 
     # 如果角色索引为1,那么当前角色必须为主力,否则执行切换动作
-    if game_info.currentRoleIndex == 1:
+    if game_info['当前角色索引'] == 1:
         pic = game_util.loop_match(ip, global_vars.模板_更改角色_主页_主力)
         if pic and pic[global_vars.模板_更改角色_主页_主力][0] > 970 and pic[global_vars.模板_更改角色_主页_主力][1] < 175:
             print(" 当前角色是主力,可以开始刷了")
@@ -43,9 +42,9 @@ def process(ip, game_info: GameInfo):
         print('----- 切换角色步骤4失败 -----')
         return False
     # 根据角色索引,计算指定角色所在的页码
-    page_num = game_util.calculate_role_page(game_info.currentRoleIndex, game_info.rolePerPageCount)
+    page_num = game_util.calculate_role_page(game_info['当前角色索引'], game_info['每页固定角色数量'])
     # 根据角色索引,计算指定角色在相应页码中的位置 即1-7的位置
-    position_index = game_util.calculate_current_role_in_current_page_index(game_info.currentRoleIndex, game_info.rolePerPageCount)
+    position_index = game_util.calculate_current_role_in_current_page_index(game_info['当前角色索引'], game_info['每页固定角色数量'])
     # 拿到对应的坐标
     position_area = global_vars.role_position[position_index]
     # 在角色列表选择指定角色
