@@ -1,12 +1,11 @@
 import time
 
 import global_vars
-from game_info import RoleConfig
 from utils import adb_util
 from utils import game_util
 
 
-def process(ip, game_config: RoleConfig):
+def process(ip, role_config):
     print('----- 开始公会任务 -----')
     if not game_util.into_desktop(ip):
         return False
@@ -28,7 +27,7 @@ def process(ip, game_config: RoleConfig):
         multiple_pic = game_util.find_pic_s(ip, temp_list)
         if global_vars.模板_公会_公会信息 in multiple_pic:
             #  已加入公会, 进行各种公会任务
-            execute_tasks(ip, game_config)
+            execute_tasks(ip, role_config)
             return True
         elif global_vars.模板_公会_加入公会 in multiple_pic:
             # 还未加入公会, 进行加入公会的操作
@@ -41,14 +40,14 @@ def process(ip, game_config: RoleConfig):
     return False
 
 
-def execute_tasks(ip, game_config: RoleConfig):
+def execute_tasks(ip, role_config):
     print("执行各种公会任务")
     # 等待自动签到
     time.sleep(5)
     # 领取签到奖励
     adb_util.click(ip, *global_vars.坐标_公会_签到奖励)
     # 领取公会任务奖励
-    if game_config.isGhrwlq:
+    if role_config['公会任务领取']:
         adb_util.click(ip, *global_vars.坐标_公会_任务入口)
         adb_util.click(ip, *global_vars.坐标_公会_全部领取)
         adb_util.click(ip, *global_vars.坐标_公会_每周任务)
