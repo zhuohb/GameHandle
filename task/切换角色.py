@@ -1,3 +1,5 @@
+import time
+
 import global_vars
 from game_info import GameInfo
 from utils import adb_util
@@ -55,6 +57,8 @@ def process(ip, game_info: GameInfo):
             # 点击游戏开始
             adb_util.click(ip, 1072, 654, 100, 25)
             print('----- 结束切换角色 -----')
+            # 点击游戏开始后要等待一段时间
+            time.sleep(5)
             return True
         else:
             # 当找不到角色页时切换列表
